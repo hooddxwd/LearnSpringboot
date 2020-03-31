@@ -2,6 +2,7 @@ package com.debug.boot.middleware.server.controller;
 
 import com.debug.boot.middleware.api.response.BaseResponse;
 import com.debug.boot.middleware.api.response.StatusCode;
+import com.debug.boot.middleware.model.dto.UserOrderPageDto;
 import com.debug.boot.middleware.server.service.UserOrderService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +42,38 @@ public class UserOrderController extends AbstractController{
         }
         return response;
     }
+
+    //分页模糊查询订单
+    @RequestMapping(value = "page/list", method = RequestMethod.GET)
+    @ResponseBody
+    public BaseResponse pageList(UserOrderPageDto dto){
+        BaseResponse response = new BaseResponse(StatusCode.Success);
+        try{
+            response.setData(userOrderService.pageGetOrders(dto));
+        }catch (Exception e){
+            log.error("用户订单controller-分页模糊查询订单-发生异常：dto={}", dto, e.fillInStackTrace());
+            response = new BaseResponse(StatusCode.Fail.getCode(), e.getMessage());
+        }
+        return response;
+    }
+
+    //删除订单
+    @RequestMapping(value = "delete",method = RequestMethod.GET)
+    @ResponseBody
+    public BaseResponse delete(@RequestParam Integer id){
+        if (id==null || id<=0){
+            return new BaseResponse(StatusCode.InvalidParams);
+        }
+
+        BaseResponse response=new BaseResponse(StatusCode.Success);
+        try {
+            userOrderService.delete(id);
+
+        }catch (Exception e){
+            log.error("用户订单controller-删除订单-发生异常：id={}",id,e.fillInStackTrace());
+            response=new BaseResponse(StatusCode.Fail.getCode(),e.getMessage());
+        }
+        return response;
+    }
+
 }

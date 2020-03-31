@@ -1,8 +1,11 @@
 package com.debug.boot.middleware.model.mapper;
 
+import com.debug.boot.middleware.model.dto.UserOrderPageDto;
 import com.debug.boot.middleware.model.entity.UserOrder;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface UserOrderMapper {
@@ -19,4 +22,8 @@ public interface UserOrderMapper {
     int updateByPrimaryKey(UserOrder record);
 
     UserOrder selectByOrderNo(@Param("orderNo") String orderNo);
+
+    Integer deleteOrder(@Param("id") Integer id);
+
+    List<UserOrder> pageSelectOrder(UserOrderPageDto dto);
 }
