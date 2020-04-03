@@ -5,20 +5,25 @@ import com.debug.boot.middleware.api.response.StatusCode;
 import com.debug.boot.middleware.model.dto.UserOrderPageDto;
 import com.debug.boot.middleware.server.dto.UserOrderDto;
 import com.debug.boot.middleware.server.service.UserOrderService;
+import com.debug.boot.middleware.server.utils.ValidatorUtil;
 import org.apache.commons.lang3.StringUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 用户提交订单Controller
  */
 @Controller
-@RequestMapping("user/order")
-public class UserOrderController extends AbstractController{
+@RequestMapping("user/order/v2")
+public class UserOrderControllerV2 extends AbstractController{
 
     @Autowired
     private UserOrderService userOrderService;
@@ -49,9 +54,10 @@ public class UserOrderController extends AbstractController{
     //新增订单
     @RequestMapping(value = "add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public BaseResponse add(@RequestBody UserOrderDto dto){
-        if(StringUtils.isBlank(dto.getOrderNo()) || dto.getUserId() == null){
-            return new BaseResponse(StatusCode.InvalidParams);
+    public BaseResponse add(@RequestBody @Validated UserOrderDto dto, BindingResult result){
+        String checkRes = ValidatorUtil.checkResult(result);
+        if(StringUtils.isNotBlank(checkRes)){
+            return new BaseResponse(StatusCode.InvalidParams.getCode(), checkRes);
         }
         BaseResponse response = new BaseResponse(StatusCode.Success);
         try{

@@ -31,7 +31,7 @@
       #{isActive,jdbcType=SMALLINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{payStatus,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.debug.boot.middleware.model.entity.UserOrder" >
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.debug.boot.middleware.model.entity.UserOrder" >
     insert into user_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

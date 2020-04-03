@@ -1,12 +1,19 @@
 package com.debug.boot.middleware.server.dto;
 
+import lombok.*;
+
 import java.io.Serializable;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class BaseDto implements Serializable {
     private Integer id;
     private String content;
 
-    public BaseDto() {
+    /*public BaseDto() {
     }
 
     public BaseDto(Integer id, String content) {
@@ -36,5 +43,5 @@ public class BaseDto implements Serializable {
                 "id=" + id +
                 ", content='" + content + '\'' +
                 '}';
-    }
+    }*/
 }
